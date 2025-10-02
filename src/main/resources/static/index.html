@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Contratistas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input { padding: 5px; width: 200px; }
+        button { padding: 5px 10px; }
+        table { border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+
+<h2>Consulta de Contratistas por DNI</h2>
+<input type="text" id="dniInput" placeholder="Ingrese DNI">
+<button onclick="buscar()">Buscar</button>
+
+<div id="resultado"></div>
+
+<script>
+    async function buscar() {
+        const dni = document.getElementById('dniInput').value;
+        const resultadoDiv = document.getElementById('resultado');
+        resultadoDiv.innerHTML = 'Buscando...';
+
+        try {
+            const response = await fetch(`http://localhost:8080/consulta/${dni}`);
+            if (!response.ok) {
+                resultadoDiv.innerHTML = 'No se encontró ningún registro.';
+                return;
+            }
+            const data = await response.json();
+
+            // Construir tabla
+            let html = '<table><tr><th>Contratista</th><th>Nombre</th><th>Apellido</th><th>Puesto</th><th>Caducidad CAMO</th><th>Status</th></tr>';
+            data.forEach(persona => {
+                html += `<tr>
+                            <td>${persona.contratista}</td>
+                            <td>${persona.nombre}</td>
+                            <td>${persona.apellido}</td>
+                            <td>${persona.puesto_de_trabajo}</td>
+                            <td>${persona.caducidad_camo}</td>
+                            <td>${persona.status}</td>
+                         </tr>`;
+            });
+            html += '</table>';
+            resultadoDiv.innerHTML = html;
+
+        }catch (error) {
+            resultadoDiv.innerHTML = 'Error al consultar la API.';
+            console.error(error);
+        }
+    }
+</script>
+
+</body>
+</html>
