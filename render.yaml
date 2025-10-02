@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: personal-contratista
+    env: java
+    buildCommand: ./mvnw clean install -DskipTests
+    startCommand: java -jar target/*.jar
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-d3fb3l8dl3ps73dg4jrg-a.oregon-postgres.render.com/personalcontratista_db
+      - key: SPRING_DATASOURCE_USERNAME
+        value: personalcontratista_db_user
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: 11GR0JX7iIgnWkN8YN6bf7rvbyyv1Shm
